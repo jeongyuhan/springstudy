@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="person" class="quiz01.Person">
+		<property name="name" value="김아무개"/>
+		<property name="car" ref="car"/>
+	</bean>
+	
+	<bean id="car1" class="quiz01.Car">
+		<constructor-arg value="520d" />
+		<constructor-arg value="6000" />
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</beans>

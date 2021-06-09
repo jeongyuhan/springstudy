@@ -1,0 +1,9 @@
+package ex01_xml;
+
+public class EngineerCalculator {
+	
+	// field(property)
+	private int num1;
+	private int num2;
+	
+}

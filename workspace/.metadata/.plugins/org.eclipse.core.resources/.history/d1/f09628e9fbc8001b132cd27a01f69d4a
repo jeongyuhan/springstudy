@@ -1,0 +1,45 @@
+package quiz03;
+
+import java.util.List;
+
+public class Exam {
+	
+	private List<Integer> scores; // 5개의 점수
+	private double average; // 평균
+	private char grade; // A ~ F
+	
+	public void info() {
+		for(int i = 0, length = scores.size(); i < length; i++) {
+			System.out.println("scores : [" + scores.get(i) + "]");
+			System.out.println("average : " + scores.get(i)/scores.size());
+			System.out.println("grade : ");
+		}
+	}
+
+	public List<Integer> getScores() {
+		return scores;
+	}
+
+	public void setScores(List<Integer> scores) {
+		this.scores = scores;
+	}
+
+	public double getAverage() {
+		return average;
+	}
+
+	public void setAverage(double average) {
+		this.average = average;
+	}
+
+	public char getGrade() {
+		return grade;
+	}
+
+	public void setGrade(char grade) {
+		this.grade = grade;
+	}
+	
+	
+	
+}

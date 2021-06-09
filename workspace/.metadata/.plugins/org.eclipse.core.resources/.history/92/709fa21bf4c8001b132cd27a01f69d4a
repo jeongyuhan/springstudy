@@ -1,0 +1,10 @@
+package ex03_xml;
+
+import java.util.Map;
+
+public class MapBean {
+	
+	// field(property)
+	private Map<String, String> map;
+	
+}

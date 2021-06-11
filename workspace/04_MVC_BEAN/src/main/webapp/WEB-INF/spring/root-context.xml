@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- Contact -->
+	<bean id="contact1" class="com.koreait.mvc02.dto.Contact">
+		<constructor-arg value="010-5555-2222" />
+		<constructor-arg value="서울시 마포구" />
+	</bean>
+	
+	<!-- Member -->
+	<bean id="member1" class="com.koreait.mvc02.dto.Member">
+		<constructor-arg value="admin" />
+		<constructor-arg ref="contact1" />
+	</bean>
+		
+		
+	<!-- Contact -->
+	<bean id="contact2" class="com.koreait.mvc02.dto.Contact">
+		<property name="phone" value="010-1234-5555" />
+		<property name="address" value="고양시 덕양구" />
+	</bean>
+	
+	<!-- Member -->
+	<bean id="member2" class="com.koreait.mvc02.dto.Member">
+		<property name="id" value="user" />
+		<property name="contact" ref="contact2" />
+	</bean>	
+</beans>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="p1" class="com.koreait.mvc03.dto.Person">
+		<qualifier value="p1" />
+		<property name="name" value="윌크"/>
+		<property name="age" value="33"/>		
+		<property name="hobbies">
+			<list>
+				<value>운동</value>
+				<value>휴식</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="p2" class="com.koreait.mvc03.dto.Person">
+		<qualifier value="p2" />
+		<property name="name" value="데이브"/>
+		<property name="age" value="29"/>		
+		<property name="hobbies">
+			<list>
+				<value>게임</value>
+				<value>독서</value>
+			</list>
+		</property>
+	</bean>
+		
+</beans>

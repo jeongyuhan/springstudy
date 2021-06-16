@@ -11,6 +11,7 @@
 		$(document).ready(function(){
 			fn1();
 			fn2();
+			fn3();
 		})
 		
 		// 함수
@@ -21,11 +22,11 @@
 					type: 'get', // @RequestMapping(method=RequestMethod=.GET)
 					data: 'name=' + $('#name').val() + "&age=" + $('#age').val(), // @RequestParam("name") String name, @RequestParam("age") int age
 					dataType: 'text', // @RequestMapping(produces="text/plain; charset=utf-8")
-					success: function(responseData) { // responseData에 return p 로 반환한 json 데이터가 저장된다.
+					success: function(responseData) { // responseData에 return으로 반환한 json 데이터가 저장된다.
 						console.log(responseData);
 					},
 					error: function(xhr, text, error){
-						console.log(xhr.responseText + ", " + text + ", " + error);  
+						console.log(text + ", " + error);  
 					}
 				})
 			})
@@ -36,7 +37,7 @@
 				$.ajax({
 					url: 'v02',
 					type: 'get',
-					data: $('#f').serialize(), // form의 모든 요소를 한번에 보낸다.
+					data: $('#f').serialize(), // form의 모든 요소를 한번에(파라미터로) 보낸다.
 					dataType: 'json',
 					success: function(responseData){
 						console.log(responseData);
@@ -48,6 +49,30 @@
 			})
 		} // end fn2()
 		
+		function fn3(){
+			$('#btn3').click(function(){
+			// 서버로 보낼 json 데이터 (문자열로 보낸다.)
+			var obj = JSON.stringify({
+					"name" : $('#name').val(),
+					"age" : $('#age').val()
+			});
+			$.ajax({
+				url: 'v03',
+				type: 'post', // json 데이터를 보낼 때 반드시 post방식으로 보내야한다.
+				data: obj, // 서버로 보내는 json 데이터, 파라미터가 아니다.(@RequestParam 대신 @RequestBody 애너테이션을 사용한다.)
+				contentType: 'application/json', // 서버로 보내는 데이터의 타입
+				dataType: 'json', // 서버에서 받는 데이터의 타입
+				success: function(responseData){
+					console.log(responseData);
+				},
+				error: function(xhr, text, error) {
+					console.log(text + ", " + error);	
+				}
+			})
+				
+		})
+	} // end fn3()
+		
 	</script>
 </head>
 <body>
@@ -57,6 +82,7 @@
 		<input type="text" name="age" id="age" placeholder="나이"><br>
 		<input type="button" id="btn1" value="전송1">
 		<input type="button" id="btn2" value="전송2">
+		<input type="button" id="btn3" value="전송3">
 	</form>
 	
 </body>

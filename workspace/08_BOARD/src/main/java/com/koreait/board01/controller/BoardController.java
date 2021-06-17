@@ -19,7 +19,7 @@ import com.koreait.board01.command.SelectBoardByNoCommand;
 import com.koreait.board01.command.UpdateBoardCommand;
 import com.koreait.board01.dto.Board;
 
-@Controller
+//@Controller
 public class BoardController {
 	
 	// field

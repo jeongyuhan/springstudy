@@ -22,10 +22,10 @@ public class DeleteContactCommand implements ContactCommand {
 		
 		long no = (Long)map.get("no");
 		
+		int result = contactDAO.deleteContact(no);
+		
 		HttpServletResponse response = (HttpServletResponse)map.get("response");
 		response.setContentType("text/html; charset=utf-8");
-		
-		int result = contactDAO.deleteContact(no);
 		try {
 			PrintWriter out = response.getWriter();
 			

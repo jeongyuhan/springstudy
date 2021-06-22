@@ -79,13 +79,5 @@ public class ContactController {
 		deleteContactCommand.execute(model);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -22,10 +22,11 @@ public class UpdateContactCommand implements ContactCommand {
 		Map<String, Object> map = model.asMap();
 		
 		Contact contact = (Contact)map.get("contact");
+
+		int result = contactDAO.updateContact(contact);
+		
 		HttpServletResponse response = (HttpServletResponse)map.get("response");
 		response.setContentType("text/html; charset=utf-8");
-		
-		int result = contactDAO.updateContact(contact);
 		try {
 			PrintWriter out = response.getWriter();
 

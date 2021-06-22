@@ -24,10 +24,11 @@ public class InsertContactCommand implements ContactCommand {
 		Contact contact = (Contact)map.get("contact");
 		
 		
-		HttpServletResponse response = (HttpServletResponse)map.get("response");
-		response.setContentType("text/html; charset=utf-8");
 
 		int result = contactDAO.insertContact(contact);
+
+		HttpServletResponse response = (HttpServletResponse)map.get("response");
+		response.setContentType("text/html; charset=utf-8");
 		try {
 			PrintWriter out = response.getWriter();
 

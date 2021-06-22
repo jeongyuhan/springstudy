@@ -32,19 +32,4 @@
 	<bean id="deleteCommand" class="com.koreait.board03.command.DeleteBoardCommand" />	
 	 -->
 		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 </beans>

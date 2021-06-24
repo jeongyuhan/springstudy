@@ -1,6 +1,7 @@
 package com.koreait.file.command;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +64,13 @@ public class InsertBoardCommand implements BoardCommand {
 				try {
 					file.transferTo(attach);					
 				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				// DB에 넣는 파일명을 인코딩 처리
+				try {
+					uploadFilename = URLEncoder.encode(uploadFilename, "UTF-8");
+				} catch (Exception e) { 
 					e.printStackTrace();
 				}
 				

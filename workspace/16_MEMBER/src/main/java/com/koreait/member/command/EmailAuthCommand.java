@@ -14,46 +14,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.ui.Model;
 
+import com.koreait.member.util.SecurityUtils;
+
 public class EmailAuthCommand {
 
 	@Autowired
 	private JavaMailSender mailSender;
-
 	
 	public Map<String, String> execute(SqlSession sqlSession, Model model) {
-		
 		
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest)map.get("request");
 		
-		String email = request.getParameter("email"); // 인증번호를 받는 사람 이메일
+		String email = request.getParameter("email");  // 인증번호를 받는 사람 이메일
+		String authCode = null;
 		
 		// MimeMessage 클래스
 		// 이메일을 작성하는 클래스
 		MimeMessage message = mailSender.createMimeMessage();
-		String authCode = "";
 		try {
 			message.setHeader("Content-Type", "text/plain; charset=utf-8");
-			message.setFrom(new InternetAddress("yh30433583@gmail.com", "관리자")); // 보내는 사람
-			message.setRecipient(Message.RecipientType.TO, new InternetAddress(email)); // 받는 사람
+			message.setFrom(new InternetAddress("forspringlec@gmail.com", "관리자"));  // 보내는 사람
+			message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));  // 받는 사람
 			message.setSubject("인증 요청 메일입니다.");
-			char[] characters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-								 '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '!', '$', '%', '?', '&'};
-			for(int i = 0; i < 6; i++) {
-				authCode += characters[(int)(Math.random() * characters.length)];
-			}
-			
-			message.setText("인증 번호는 " + authCode + "입니다.");
-			
-			
-		} catch(Exception e) {
+			authCode = SecurityUtils.getAuthCode(6);  // 6자리 인증코드
+			message.setText("인증번호는 " + authCode + "입니다.");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		// 이메일 보내기
 		mailSender.send(message);
-	
-		Map<String, String> resultMap = new HashMap<String, String>();
+		
+		Map<String, String> resultMap = new HashMap<>();
 		resultMap.put("authCode", authCode);
 		return resultMap;
 		

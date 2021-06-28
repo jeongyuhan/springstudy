@@ -16,7 +16,7 @@ public class UpdateMemberCommand implements MemberCommand {
 
 	@Override
 	public void execute(SqlSession sqlSession, Model model) {
-
+		
 		Map<String, Object> map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest)map.get("request");
 		
@@ -32,13 +32,12 @@ public class UpdateMemberCommand implements MemberCommand {
 		MemberDAO memberDAO = sqlSession.getMapper(MemberDAO.class);
 		int count = memberDAO.updateMember(member);
 		
-		if(count > 0) {
-			HttpSession session = (HttpSession)map.get("session");
+		if (count > 0) {
+			HttpSession session = request.getSession();
 			Member loginUser = (Member)session.getAttribute("loginUser");
 			loginUser.setName(name);
 			loginUser.setEmail(email);
 		}
-		
 		
 	}
 

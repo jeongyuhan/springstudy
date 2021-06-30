@@ -8,6 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getTotalRecord" resultType="int">
 		SELECT COUNT(EMPLOYEE_ID)
 		  FROM EMPLOYEES
+		 WHERE <if test="column != 'SALARY'">${column} LIKE '%' || #{query} || '%'</if>
+		       <if test="column == 'SALARY'">SALARY BETWEEN #{bottom} AND #{top}</if>   
 	</select>
 
 	<select id="searchAll" resultType="com.koreait.search.dto.Employees">

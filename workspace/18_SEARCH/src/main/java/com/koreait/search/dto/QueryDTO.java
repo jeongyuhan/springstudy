@@ -9,5 +9,7 @@ public class QueryDTO {
 	private String query;
 	private int beginRecord;
 	private int endRecord;
+	private String top;
+	private String bottom;
 	
 }

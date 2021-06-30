@@ -78,10 +78,13 @@
 			<option value="EMPLOYEE_ID" data-name="employeeId">EMPLOYEE_ID</option>
 			<option value="FIRST_NAME" data-name="firstName">FIRST_NAME</option>
 			<option value="LAST_NAME" data-name="lastName">LAST_NAME</option>
+			<option value="SALARY" data-name="salary">SALARY</option>			
 		</select>
 		<input list="auto_complete_list" type="text" name="query" id="query">
 		<datalist id="auto_complete_list">
 		</datalist>
+		<input type="number" name="bottom" placeholder="최소연봉">~
+		<input type="number" name="top" placeholder="최대연봉">
 		<input type="button" id="search_btn" value="검색">
 		<input type="button" id="init_btn" value="초기화">
 		<input type="button" id="search_all_btn" value="전체조회">

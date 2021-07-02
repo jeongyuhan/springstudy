@@ -117,6 +117,7 @@
 					alert('이메일 인증을 받아야 합니다.');
 					return false;
 				} else {
+					alert('가입에 성공하였습니다!');
 					$('#f').attr('action', 'join.do');
 					$('#f').submit();
 				}

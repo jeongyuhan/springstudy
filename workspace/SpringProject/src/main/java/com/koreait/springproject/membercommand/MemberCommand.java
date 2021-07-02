@@ -1,4 +1,4 @@
-package com.koreait.springproject.command;
+package com.koreait.springproject.membercommand;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;

@@ -7,7 +7,6 @@ import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class EmailAuthCommand {
 		MimeMessage message = mailSender.createMimeMessage();
 		try {
 			message.setHeader("Content-Type", "text/plain; charset=utf-8");
-			message.setFrom(new InternetAddress("forspringlec@gmail.com", "관리자"));  // 보내는 사람
+			message.setFrom(new InternetAddress("yh30433583@gmail.com", "관리자"));  // 보내는 사람
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));  // 받는 사람
 			message.setSubject("인증 요청 메일입니다.");
 			authCode = SecurityUtils.getAuthCode(6);  // 6자리 인증코드

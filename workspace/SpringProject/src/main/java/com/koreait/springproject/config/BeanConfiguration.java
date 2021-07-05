@@ -9,8 +9,11 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.koreait.springproject.boardcommand.DeleteBoardCommand;
 import com.koreait.springproject.boardcommand.InsertBoardCommand;
+import com.koreait.springproject.boardcommand.SelectBoardByNoCommand;
 import com.koreait.springproject.boardcommand.SelectBoardListCommand;
+import com.koreait.springproject.boardcommand.UpdateBoardCommand;
 import com.koreait.springproject.membercommand.DeleteMemberCommand;
 import com.koreait.springproject.membercommand.EmailAuthCommand;
 import com.koreait.springproject.membercommand.FindIdCommand;
@@ -96,11 +99,14 @@ public class BeanConfiguration {
 	
 	
 	//---------Board---------//
+	
+	// 전체 게시물
 	@Bean
 	public SelectBoardListCommand selectBoardListCommand() {
 		return new SelectBoardListCommand();
 	}
 	
+	// 게시물 파일 처리
 	@Bean
 	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -109,16 +115,29 @@ public class BeanConfiguration {
 		return multipartResolver;
 	}
 	
+	// 게시물 작성
 	@Bean
 	public InsertBoardCommand insertBoardCommand() {
 		return new InsertBoardCommand();
 	}
 	
+	// 게시물 내용보기
+	@Bean
+	public SelectBoardByNoCommand selectBoardByNoCommand() {
+		return new SelectBoardByNoCommand();
+	}
 	
+	// 게시물 수정하기
+	@Bean
+	public UpdateBoardCommand updateBoardCommand() {
+		return new UpdateBoardCommand();
+	}
 	
-	
-	
-	
+	// 게시물 삭제하기
+	@Bean
+	public DeleteBoardCommand deleteBoardCommand() {
+		return new DeleteBoardCommand();
+	}
 	
 	
 	

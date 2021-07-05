@@ -27,7 +27,7 @@ public class InsertBoardCommand implements BoardCommand {
 		
 		BoardDAO boardDAO = sqlSession.getMapper(BoardDAO.class);
 		
-		if(image != null || !image.isEmpty()) {
+		if(image != null && !image.isEmpty()) {
 			String originalFilename = image.getOriginalFilename();
 			String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1); 
 			String filename = originalFilename.substring(0, originalFilename.lastIndexOf(".")); 

@@ -5,7 +5,7 @@ import com.koreait.springproject.dto.PageDTO;
 public class PagingUtils {
 	
 	// field
-	public static int recordPerPage = 10;
+	public static int recordPerPage = 5;
 	public static int pagePerBlock = 5;
 	public static int beginRecord;
 	public static int endRecord;

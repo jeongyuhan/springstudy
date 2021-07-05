@@ -11,6 +11,7 @@
 	<script>
 		$(document).ready(function(){
 			fn_insertBoard();
+			fn_paging();
 		})
 		
 		function fn_insertBoard(){
@@ -18,14 +19,28 @@
 				location.href = 'insertBoardPage.do';
 			});
 		}
+		var page = 1;
+		function fn_paging(){
+			
+		}
 	</script>	
 </head>
 <body>
 	
 	<h1>갤러리 게시판</h1>
-	<c:if test="${loginUser != null}">			
-		<input type="button" value="게시글 작성하기" id="insert_board_btn">
-	</c:if>
+	
+	<div class="search_box">
+		<form id="f" method="get">
+			<select id="column" name="column">
+				<option value="">:::선택:::</option>
+				<option value="TITLE">제목</option>
+				<option value="WRITER">작성자</option>
+			</select>
+			<input type="text" id="query" name="query"> 
+			<input type="button" value="검색" id="search_btn">
+			<input type="button" value="초기화" id="init_btn">
+		</form>
+	</div>
 	
 	<br><br><hr><br><br>
 	
@@ -51,7 +66,7 @@
 					<c:forEach var="board" items="${list}">
 						<tr>
 							<td>${board.bno}</td>
-							<td><a href="selectBoardByNo.do?no=${board.bno}">${board.title}</a></td>
+							<td><a href="selectBoardByNo.do?bno=${board.bno}">${board.title}</a></td>
 							<td>${board.writer}</td>
 							<td>${board.hit}</td>
 							<td>${board.postdate}</td>
@@ -60,18 +75,24 @@
 									${board.image}"<i class="fas fa-paperclip"></i>						
 								</c:if>
 							</td>
-							<c:if test="${loginUser.id == board.writer}">
-								<td><input type="button" value="수정" id="board_update_btn"></td>		
-								<td><input type="button" value="삭제" id="board_delete_btn"></td>		
-							</c:if>
 						</tr>
 					</c:forEach>
 				</c:if>
 				
 				
 			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						${paging}
+					</td>
+				</tr>
+			</tfoot>
 		</table>
 	</div>
+	<c:if test="${loginUser != null}">			
+		<input type="button" value="게시글 작성하기" id="insert_board_btn">
+	</c:if>
 	
 </body>
 </html>

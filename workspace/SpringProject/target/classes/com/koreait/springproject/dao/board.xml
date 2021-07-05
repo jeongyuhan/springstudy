@@ -12,12 +12,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 직접 연결 방법 : mapper의 namespace를 BoardDAO의 경로로 작성해준다. -->
 <mapper namespace="com.koreait.springproject.dao.BoardDAO">
 	
+	<!-- 페이징 -->
+	<select id="getTotalRecord" resultType="int">
+		SELECT COUNT(WRITER)
+		  FROM BOARD
+	</select>
+
 	<!-- 전체 게시글 반환 -->
 	<select id="selectBoardList" resultType="com.koreait.springproject.dto.BoardDTO">
+		SELECT A.*
+		  FROM (SELECT ROWNUM AS RN
+		             , BNO
+		             , WRITER
+		             , TITLE
+		             , CONTENT
+		             , POSTDATE
+		             , LASTMODIFIED
+		             , IP
+		             , HIT
+		             , IMAGE  
+			      FROM BOARD) A
+		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}
+		 ORDER BY HIT DESC
+	</select>
+		<!-- 	
 		SELECT BNO, WRITER, TITLE, CONTENT, POSTDATE, LASTMODIFIED, IP, HIT, IMAGE
 		  FROM BOARD
 		 ORDER BY HIT DESC
-	</select>
+		 -->
 	
 	<!-- 게시글 작성 -->
 	<insert id="insertBoard">
@@ -25,14 +47,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES (BOARD_SEQ.NEXTVAL, #{param1}, #{param2}, #{param3}, SYSDATE, SYSDATE, #{param4}, 0, #{param5})
 	</insert>
 	
+	<!-- 게시물 내용보기 -->
+	<select id="selectBoardByNo" resultType="com.koreait.springproject.dto.BoardDTO">
+		SELECT BNO, WRITER, TITLE, CONTENT, POSTDATE, LASTMODIFIED, IP, HIT, IMAGE
+		  FROM BOARD
+		 WHERE BNO = #{bno} 
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateHit">
+		UPDATE BOARD
+		   SET HIT = HIT + 1
+		 WHERE BNO = #{bno}  
+	</update>
 	
 	
+	<!-- 게시물 수정 -->
+	<update id="updateBoard">
+		UPDATE BOARD
+		   SET TITLE = #{param1}
+		     , CONTENT = #{param2}
+		     , IMAGE = #{param3}
+		     , LASTMODIFIED = SYSDATE
+		 WHERE BNO = #{param4}      
+	</update>
 	
-	
-	
-	
-	
-	
+	<!-- 게시물 삭제 -->
+	<delete id="deleteBoard">
+		DELETE 
+		  FROM BOARD
+		 WHERE BNO = #{bno}
+	</delete>
 	
 	
 	

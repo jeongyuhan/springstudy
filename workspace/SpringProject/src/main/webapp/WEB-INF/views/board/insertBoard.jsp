@@ -5,6 +5,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(function(){
+			$('#return_btn').click(function(){
+				history.back();
+			});
+		})
+	</script>	
 </head>
 <body>
 	
@@ -23,6 +31,7 @@
 			<input type="file" id="image" name="image"><br><br>
 			
 			<button>작성하기</button>
+			<input type="button" value="돌아가기" id="return_btn">
 		</form>
 	</div>
 	

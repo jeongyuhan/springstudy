@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.koreait.springproject.boardcommand.DeleteBoardCommand;
 import com.koreait.springproject.boardcommand.InsertBoardCommand;
+import com.koreait.springproject.boardcommand.SearchCommand;
 import com.koreait.springproject.boardcommand.SelectBoardByNoCommand;
 import com.koreait.springproject.boardcommand.SelectBoardListCommand;
 import com.koreait.springproject.boardcommand.UpdateBoardCommand;
@@ -23,6 +25,7 @@ public class BoardController {
 	private SelectBoardByNoCommand selectBoardByNoCommand;
 	private UpdateBoardCommand updateBoardCommand;
 	private DeleteBoardCommand deleteBoardCommand;
+	private SearchCommand searchCommand;
 	
 	
 	
@@ -31,7 +34,8 @@ public class BoardController {
 						   InsertBoardCommand insertBoardCommand,
 						   SelectBoardByNoCommand selectBoardByNoCommand,
 						   UpdateBoardCommand updateBoardCommand,
-						   DeleteBoardCommand deleteBoardCommand) {
+						   DeleteBoardCommand deleteBoardCommand,
+						   SearchCommand searchCommand) {
 		super();
 		this.sqlSession = sqlSession;
 		this.selectBoardListCommand = selectBoardListCommand;
@@ -39,6 +43,7 @@ public class BoardController {
 		this.selectBoardByNoCommand = selectBoardByNoCommand;
 		this.updateBoardCommand = updateBoardCommand;
 		this.deleteBoardCommand = deleteBoardCommand;
+		this.searchCommand = searchCommand;
 	}
 
 
@@ -87,4 +92,16 @@ public class BoardController {
 		return "redirect:selectBoardList.do";
 	}
 
+	// 검색
+	@GetMapping(value="search.do")
+	public String search(HttpServletRequest request,
+						 Model model) {
+		model.addAttribute("request", request);
+		searchCommand.execute(sqlSession, model);
+		return "board/searchList";
+	}
+	
+	
+	
+	
 }

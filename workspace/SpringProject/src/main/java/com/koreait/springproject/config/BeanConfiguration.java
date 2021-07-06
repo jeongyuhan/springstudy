@@ -11,9 +11,11 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.koreait.springproject.boardcommand.DeleteBoardCommand;
 import com.koreait.springproject.boardcommand.InsertBoardCommand;
+import com.koreait.springproject.boardcommand.SearchCommand;
 import com.koreait.springproject.boardcommand.SelectBoardByNoCommand;
 import com.koreait.springproject.boardcommand.SelectBoardListCommand;
 import com.koreait.springproject.boardcommand.UpdateBoardCommand;
+import com.koreait.springproject.boardreplycommand.InsertBoardReplyCommand;
 import com.koreait.springproject.membercommand.DeleteMemberCommand;
 import com.koreait.springproject.membercommand.EmailAuthCommand;
 import com.koreait.springproject.membercommand.FindIdCommand;
@@ -139,10 +141,20 @@ public class BeanConfiguration {
 		return new DeleteBoardCommand();
 	}
 	
+	// 검색
+	@Bean
+	public SearchCommand searchCommand() {
+		return new SearchCommand();
+	}
 	
 	
+	//---------BoardReply---------//
 	
-	
+	// 댓글 작성
+	@Bean
+	public InsertBoardReplyCommand insertBoardReplyCommand() {
+		return new InsertBoardReplyCommand();
+	}
 	
 	
 	

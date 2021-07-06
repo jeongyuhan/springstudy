@@ -10,19 +10,72 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function(){
+			fn_init();
+			fn_search();
 			fn_insertBoard();
-			fn_paging();
 		})
 		
+		// 초기화 함수
+		function fn_init(){
+			$('#init_btn').click(function(){
+				$('#column').val('');
+				$('#query').val('');
+				location.href = 'selectBoardList.do';
+			});
+		}
+		
+		// 검색기능
+		function fn_search(){
+			$('#search_btn').click(function(){	
+				if($('#column').val() == '') {
+					alert('카테고리를 선택해주세요.');
+					$('#column').focus();
+					return false;
+				}
+				$('#f').attr('action', 'search.do');
+				$('#f').submit();
+				/*$.ajax({
+					url: 'search.do',
+					type: 'get',
+					data: $('#f').serialize(),
+					dataType: 'json',
+					success: function(resultMap) {
+						alert(resultMap.message);
+						fn_listTable(resultMap.status, resultMap.list);
+					}
+				});*/
+			});				
+			
+		}
+		
+		// 검색 결과 출력
+		function fn_listTable(status, list){
+			$('#list').empty();
+			if(status == 200) {
+				$.each(list, function(i, board){
+					$('<tr>')
+					.append($('<td>').text(board.bno))
+					.append($('<td>').text(board.title))
+					.append($('<td>').text(board.writer))
+					.append($('<td>').text(board.hit))
+					.append($('<td>').text(board.postdate))
+					.append($('<td>').text(board.image))
+					.appendTo('#list');		
+				});
+			} else if(status == 500) {
+				$('<tr>')
+				.append($('<td colspan="6">').text('검색결과 없음'))
+				.appendTo('#list');
+			}
+		}
+		
+		// 게시글 작성하기
 		function fn_insertBoard(){
 			$('#insert_board_btn').click(function(){
 				location.href = 'insertBoardPage.do';
 			});
 		}
-		var page = 1;
-		function fn_paging(){
-			
-		}
+		
 	</script>	
 </head>
 <body>
@@ -56,7 +109,7 @@
 					<td>첨부자료</td>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="list">
 				<c:if test="${empty list}">
 					<tr>
 						<td colspan="6">작성된 게시글이 없습니다.</td>

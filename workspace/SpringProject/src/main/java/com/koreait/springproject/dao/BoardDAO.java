@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.koreait.springproject.dto.BoardDTO;
 import com.koreait.springproject.dto.PageDTO;
+import com.koreait.springproject.dto.QueryDTO;
 
 public interface BoardDAO {
 	
@@ -30,5 +31,9 @@ public interface BoardDAO {
 	
 	
 	
+	// 게시글 검색
+	public List<BoardDTO> search(QueryDTO queryDTO);
 	
+	// 검색 레코드 수
+	public int getSearchRecord(QueryDTO queryDTO);
 }

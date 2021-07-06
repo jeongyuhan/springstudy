@@ -79,11 +79,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 WHERE BNO = #{bno}
 	</delete>
 	
+	<!-- 검색 게시글 -->
+	<select id="search" resultType="com.koreait.springproject.dto.BoardDTO">
+		SELECT A.*
+		  FROM (SELECT ROWNUM AS RN
+		             , BNO
+		             , WRITER
+		             , TITLE
+		             , CONTENT
+		             , POSTDATE
+		             , LASTMODIFIED
+		             , IP
+		             , HIT
+		             , IMAGE  
+			      FROM BOARD) A
+		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}
+		   AND ${column} LIKE '%' || #{query} || '%'
+		 ORDER BY HIT DESC
+	</select>
 	
-	
-	
-	
-	
+	<!-- 검색 레코드수 -->
+	<select id="getSearchRecord" resultType="int">
+		SELECT COUNT(WRITER)
+		  FROM BOARD
+		 WHERE ${column} LIKE '%' || #{query} || '%' 
+	</select>
 	
 	
 	

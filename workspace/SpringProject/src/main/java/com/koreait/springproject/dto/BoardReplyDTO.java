@@ -7,19 +7,19 @@ public class BoardReplyDTO {
 	private long replyno;
 	private String replywriter;
 	private String replycontent;
-	private Date replydate;
+	private Date replypostdate;
 	private String replyip;
 	
 	public BoardReplyDTO() {
 		super();
 	}
 
-	public BoardReplyDTO(long replyno, String replywriter, String replycontent, Date replydate, String replyip) {
+	public BoardReplyDTO(long replyno, String replywriter, String replycontent, Date replypostdate, String replyip) {
 		super();
 		this.replyno = replyno;
 		this.replywriter = replywriter;
 		this.replycontent = replycontent;
-		this.replydate = replydate;
+		this.replypostdate = replypostdate;
 		this.replyip = replyip;
 	}
 
@@ -47,12 +47,12 @@ public class BoardReplyDTO {
 		this.replycontent = replycontent;
 	}
 
-	public Date getReplydate() {
-		return replydate;
+	public Date getReplypostdate() {
+		return replypostdate;
 	}
 
-	public void setReplydate(Date replydate) {
-		this.replydate = replydate;
+	public void setReplypostdate(Date replypostdate) {
+		this.replypostdate = replypostdate;
 	}
 
 	public String getReplyip() {
@@ -62,6 +62,7 @@ public class BoardReplyDTO {
 	public void setReplyip(String replyip) {
 		this.replyip = replyip;
 	}
+
 	
 	
 	

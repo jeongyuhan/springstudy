@@ -15,17 +15,12 @@
 			fn_update();
 			// 게시글 삭제
 			fn_delete();
-			
-			// 전체 댓글 불러오기
-			fn_selectAllReply();			
-			// 게시글 댓글 작성
-			fn_insert_reply();
 		})
 		
 		// 게시판 돌아가기
 		function fn_return_list(){
 			$('#return_list_btn').click(function(){
-				location.href = 'selectBoardList.do';
+				location.href = 'boardPage.do';
 			});
 		}
 		
@@ -54,69 +49,8 @@
 			});
 		}
 		
-		
-		// 전체 댓글 불러오기
-		function fn_selectAllReply() {
-			$.ajax({
-				url: 'selectAllReply.do',
-				type: 'get',
-				dataType: 'json',
-				success: function(resultMap){
-					alert(resultMap);					
-					//fn_listTable(resultMap.status, resultMap.list);
-				}
-			});
-		}
-		
-		// 게시글 댓글 작성
-		function fn_insert_reply() {
-			$('#insert_reply_btn').click(function(){
-				if(${loginUser == null}) {
-					alert('로그인이후에 이용가능합니다.');
-					return false;
-				}
-				if($('#replycontent').val() == '') {
-					alert('내용을 입력해주세요.');
-					$('#replycontent').focus();
-					return false;
-				}
-				
-				$.ajax({
-					url: 'insertReply.do',
-					type: 'get',
-					data: $('#f2').serialize(),
-					dataType: 'json',
-					success: function(resultMap) {
-						$('#replycontent').val('');
-						alert(resultMap.status);
-						alert(resultMap.message);
-						fn_reply_list(resultMap.status, resultMap.list);
-					}
-				});
-			});
-		}
-		
-		// 목록만들기
-		function fn_reply_list(status, list) {
-			$('#list').empty();
-			if(status == 200) {
-				$.each(list, function(i, reply){
-					$('<tr>')
-					.append($('<td>').text(board.replywriter))
-					.append($('<td>').text(board.replycontent))
-					.append($('<td>').text(board.replypostdate))
-					.append($('<td>').text(board.replyip))
-					.appendTo('#list');
-				});
-			} else if(status == 500){
-				$('<tr>')
-				.append($('<td colspan="4">').text('댓글을 달아주세요.'))
-				.appendTo('#list');
-			}
-		}
-		
-		
 	</script>
+
 </head>
 <body>
 	
@@ -163,36 +97,6 @@
 		</form>
 	</div>
 	
-	<br><hr><br>
 	
-	<div class="reply_write_box">
-		<form id="f2" method="get">		
-			<input type="hidden" id="bno" name="bno" value="${boardDTO.bno}">
-			<input type="text" id="replywriter" name="replywriter" value="${loginUser.id}" placeholder="작성자" readonly><br>
-			<textarea id="replycontent" name="replycontent" rows="4" cols="22"  placeholder="내용"></textarea><br>
-			<input type="button" value="작성" id="insert_reply_btn">
-		</form>
-	</div>
-	<div class="reply_list_box">
-		<table border="1">
-			<thead></thead>
-				<tr>
-					<td>작성자</td>
-					<td>내용</td>
-					<td>작성일</td>
-					<td>작성자IP</td>
-				</tr>
-			</thead>
-			<tbody id="list">
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4">
-						${paging}
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
 </body>
 </html>

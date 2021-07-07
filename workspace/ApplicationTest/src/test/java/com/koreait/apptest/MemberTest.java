@@ -34,7 +34,7 @@ public class MemberTest {
 	@Test // 
 	public void joinTest() {
 		Member member = new Member();
-		member.setId("test");
+		member.setId("test2");
 		member.setPw("1111");
 		member.setName("테스트");
 		member.setEmail("test@web.com");

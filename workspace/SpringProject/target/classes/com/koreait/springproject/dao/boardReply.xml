@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 페이징 -->
 	<select id="getTotalRecord" resultType="int">
 		SELECT COUNT(REPLYWRITER)
-		  FROM BOARD
+		  FROM BOARDREPLY
 	</select>
 
 	<!-- 댓글 작성 -->
@@ -26,15 +26,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 전체 댓글 -->
 	<select id="selectReply" resultType="com.koreait.springproject.dto.BoardReplyDTO">
-		SELECT A.RN, A.REPLYNO, A.REPLYWRITER, A.REPLYCONTENT, A.REPLYPOSTDATE, A.REPLYIP
-		  FROM (SELECT ROWNUM AS RN
-		  			 , REPLYNO
-		  			 , REPLYWRITER
-		  			 , REPLYCONTENT
-		  			 , REPLYPOSTDATE
-		  			 , REPLYIP
-		  		  FROM BOARDREPLY ) A
-		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}		  	 
+		SELECT B.*
+		  FROM (SELECT ROWNUM AS RN, A.*
+		  		  FROM (SELECT REPLYNO
+		  			 		 , REPLYWRITER
+		  			 		 , REPLYCONTENT
+		  			 		 , REPLYPOSTDATE
+		  			 		 , REPLYIP
+		  		  		  FROM BOARDREPLY ) A) B
+		 WHERE B.RN BETWEEN #{beginRecord} AND #{endRecord}		  	 
 	</select>
 	
 	

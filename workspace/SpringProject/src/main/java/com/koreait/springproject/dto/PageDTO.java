@@ -3,7 +3,6 @@ package com.koreait.springproject.dto;
 public class PageDTO {
 	
 	
-	private int page;
 	private int totalRecord;
 	private int recordPerPage;
 	private int beginRecord;
@@ -14,11 +13,10 @@ public class PageDTO {
 	private int endPage;
 
 	public PageDTO() {}
-	
-	public PageDTO(int page, int totalRecord, int recordPerPage, int beginRecord, int endRecord, int totalPage,
+
+	public PageDTO(int totalRecord, int recordPerPage, int beginRecord, int endRecord, int totalPage,
 			int pagePerBlock, int beginPage, int endPage) {
 		super();
-		this.page = page;
 		this.totalRecord = totalRecord;
 		this.recordPerPage = recordPerPage;
 		this.beginRecord = beginRecord;
@@ -29,13 +27,6 @@ public class PageDTO {
 		this.endPage = endPage;
 	}
 
-	public int getPage() {
-		return page;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
-	}
 
 	public int getTotalRecord() {
 		return totalRecord;
@@ -100,6 +91,8 @@ public class PageDTO {
 	public void setEndPage(int endPage) {
 		this.endPage = endPage;
 	}
+	
+	
 	
 	
 	

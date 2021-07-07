@@ -32,7 +32,7 @@ public interface BoardDAO {
 	
 	
 	// 게시글 검색
-	public List<BoardDTO> search(QueryDTO queryDTO);
+	public List<BoardDTO> searchQuery(QueryDTO queryDTO);
 	
 	// 검색 레코드 수
 	public int getSearchRecord(QueryDTO queryDTO);

@@ -11,11 +11,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.koreait.springproject.boardcommand.DeleteBoardCommand;
 import com.koreait.springproject.boardcommand.InsertBoardCommand;
-import com.koreait.springproject.boardcommand.SearchCommand;
+import com.koreait.springproject.boardcommand.SearchQueryCommand;
 import com.koreait.springproject.boardcommand.SelectBoardByNoCommand;
 import com.koreait.springproject.boardcommand.SelectBoardListCommand;
 import com.koreait.springproject.boardcommand.UpdateBoardCommand;
-import com.koreait.springproject.boardreplycommand.InsertBoardReplyCommand;
+import com.koreait.springproject.boardreplycommand.BoardReplyInsertCommand;
+import com.koreait.springproject.boardreplycommand.SelectAllReplyCommand;
 import com.koreait.springproject.membercommand.DeleteMemberCommand;
 import com.koreait.springproject.membercommand.EmailAuthCommand;
 import com.koreait.springproject.membercommand.FindIdCommand;
@@ -143,8 +144,8 @@ public class BeanConfiguration {
 	
 	// 검색
 	@Bean
-	public SearchCommand searchCommand() {
-		return new SearchCommand();
+	public SearchQueryCommand searchQueryCommand() {
+		return new SearchQueryCommand();
 	}
 	
 	
@@ -152,12 +153,15 @@ public class BeanConfiguration {
 	
 	// 댓글 작성
 	@Bean
-	public InsertBoardReplyCommand insertBoardReplyCommand() {
-		return new InsertBoardReplyCommand();
+	public BoardReplyInsertCommand boardReplyInsertCommand() {
+		return new BoardReplyInsertCommand();
 	}
 	
-	
-	
+	// 댓글 목록 가져오기
+	@Bean
+	public SelectAllReplyCommand selectAllReplyCommand() {
+		return new SelectAllReplyCommand();
+	}
 	
 	
 	

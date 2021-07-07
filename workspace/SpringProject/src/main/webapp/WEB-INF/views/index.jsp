@@ -61,7 +61,7 @@
 	
 	<br><hr><br>
 	
-	<a href="selectBoardList.do">갤러리 게시판으로~</a>
+	<a href="boardPage.do">갤러리 게시판으로~</a>
 	
 </body>
 </html>

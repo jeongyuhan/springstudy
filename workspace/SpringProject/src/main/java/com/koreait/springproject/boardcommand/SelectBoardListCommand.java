@@ -1,38 +1,40 @@
 package com.koreait.springproject.boardcommand;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;
 
 import com.koreait.springproject.dao.BoardDAO;
+import com.koreait.springproject.dto.BoardDTO;
 import com.koreait.springproject.dto.PageDTO;
+import com.koreait.springproject.dto.QueryDTO;
 import com.koreait.springproject.util.PagingUtils;
 
-public class SelectBoardListCommand implements BoardCommand {
+public class SelectBoardListCommand {
 
-	@Override
-	public void execute(SqlSession sqlSession, Model model) {
+	public Map<String, Object> execute(SqlSession sqlSession, Model model) {
 
 		Map<String, Object> map = model.asMap();
-		HttpServletRequest request = (HttpServletRequest)map.get("request");
+		QueryDTO queryDTO = (QueryDTO)map.get("queryDTO");
 		
-		Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-		int page = Integer.parseInt(opt.orElse("1"));
+		int page = queryDTO.getPage();		
 		
 		BoardDAO boardDAO = sqlSession.getMapper(BoardDAO.class);
-		
+
 		int totalRecord = boardDAO.getTotalRecord();
 		
-		PageDTO pageDTO = PagingUtils.getPage(totalRecord, page);
-		String paging = PagingUtils.getPaging("selectBoardList.do", page);
+		PageDTO paging = PagingUtils.getPage(totalRecord, page);
 		
-		model.addAttribute("paging", paging);
-		model.addAttribute("list", boardDAO.selectBoardList(pageDTO));
-		
+		List<BoardDTO> list = boardDAO.selectBoardList(paging);
+
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", list);
+		resultMap.put("exists", list.size() > 0);
+		resultMap.put("paging", paging);
+		return resultMap;
 	}
 
 }

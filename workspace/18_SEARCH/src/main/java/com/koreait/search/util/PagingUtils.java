@@ -40,6 +40,10 @@ public class PagingUtils {
 		return pageDTO;
 	}
 	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// ajax 사용 x
 	// << 1 2 3 4 5 >> 반환 (페이지 번호를 출력해주는 부분을 PagingUtils에서 만든 결과를 반환시켜준다.(ajax를 사용하지 않기 위해))
 	public static String getPaging(String path, int page) {
 		

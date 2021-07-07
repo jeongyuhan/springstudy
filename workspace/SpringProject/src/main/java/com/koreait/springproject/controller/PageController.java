@@ -31,6 +31,11 @@ public class PageController {
 	
 	//---------Board---------//
 	
+	@GetMapping(value="boardPage.do")
+	public String boardPage() {
+		return "board/board";
+	}
+	
 	@GetMapping(value="insertBoardPage.do")
 	public String insertBoardPage() {
 		return "board/insertBoard";

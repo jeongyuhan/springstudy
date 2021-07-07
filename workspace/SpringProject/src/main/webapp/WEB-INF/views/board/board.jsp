@@ -10,63 +10,114 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script>
 		$(document).ready(function(){
-			fn_init();
-			fn_search();
-			fn_insertBoard();
+			fn_selectBoardList(); // 전체목록 가져오기
+			fn_paging(); // 페이징
+			fn_init(); // 초기화
+			fn_insertBoard(); // 작성
+			fn_searchQuery() // 검색
+			
+			// 전체 댓글 불러오기
+			fn_selectAllReply();
+			// 게시글 댓글 작성
+			fn_insert_reply();
 		})
+		
+		// 전체 게시글
+		var page = 1;
+		function fn_selectBoardList(){
+			var obj = {
+					page : page
+			};
+			$.ajax({
+				url: 'selectBoardList.do',
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify(obj),
+				dataType: 'json',
+				success: function(resultMap) {
+					// 목록 생성
+					$('#board_list').empty();
+					if(resultMap.exists) {
+						$.each(resultMap.list, function(i, board){
+							$('<tr>')
+							.append($('<td>').text(board.bno))
+							.append($('<td>').html('<a href="selectBoardByNo.do?bno=' + board.bno + '">' + board.title + '</a>'))
+							.append($('<td>').text(board.writer))
+							.append($('<td>').text(board.hit))
+							.append($('<td>').text(board.postdate))
+							.append($('<td>').text(board.image))
+							.appendTo('#board_list');
+						});
+					} else {
+						$('<tr>')
+						.append('<td colspan="6">등록된 게시글이 없습니다.</td>')
+						.appendTo('#board_list');
+					}
+					var paging = resultMap.paging;
+					$('#paging').empty();
+					if(paging.beginPage <= paging.pagePerBlock) {
+						$('<div>').addClass('disable').text('◀').appendTo('#paging');
+					} else {
+						$('<div>')
+						.addClass('previous_block').addClass('link')
+						.attr('data-page', paging.beginPage - 1)
+						.text('◀')
+						.appendTo('#paging');
+					}
+					for(let p = paging.beginPage; p <= paging.endPage; p++) {
+						if(p == paging.page) {
+							$('<div>')
+							.addClass('now_page')
+							.text(p)
+							.appendTo('#paging')
+						} else {
+							$('<div>')
+							.addClass('go_page').addClass('link')
+							.attr('data-page', p)
+							.text(p)
+							.appendTo('#paging');
+						}
+					}
+					if(paging.endPage == paging.totalPage) {
+						$('<div>')
+						.addClass('disable')
+						.text('▶')
+						.appendTo('#paging');
+					} else {
+						$('<div>')
+						.addClass('next_block').addClass('link')
+						.attr('data-page', paging.endPage + 1)
+						.text('▶')
+						.appendTo('#paging');
+					}
+				}								
+			});
+		}
+		
+		// 페이징 링크 처리
+		function fn_paging() {
+			$('body').on('click', '.previous_block', function(){
+				page = $(this).attr('data-page');
+				fn_selectBoardList();
+			});
+			$('body').on('click', '.go_page', function(){
+				page = $(this).attr('data-page');
+				fn_selectBoardList();
+			});
+			$('body').on('click', '.next_block', function(){
+				page = $(this).attr('data-page');
+				fn_selectBoardList();
+			});
+			
+		}
 		
 		// 초기화 함수
 		function fn_init(){
 			$('#init_btn').click(function(){
 				$('#column').val('');
 				$('#query').val('');
-				location.href = 'selectBoardList.do';
+				location.href = 'boardPage.do';
 			});
-		}
-		
-		// 검색기능
-		function fn_search(){
-			$('#search_btn').click(function(){	
-				if($('#column').val() == '') {
-					alert('카테고리를 선택해주세요.');
-					$('#column').focus();
-					return false;
-				}
-				$('#f').attr('action', 'search.do');
-				$('#f').submit();
-				/*$.ajax({
-					url: 'search.do',
-					type: 'get',
-					data: $('#f').serialize(),
-					dataType: 'json',
-					success: function(resultMap) {
-						alert(resultMap.message);
-						fn_listTable(resultMap.status, resultMap.list);
-					}
-				});*/
-			});				
-			
-		}
-		
-		// 검색 결과 출력
-		function fn_listTable(status, list){
-			$('#list').empty();
-			if(status == 200) {
-				$.each(list, function(i, board){
-					$('<tr>')
-					.append($('<td>').text(board.bno))
-					.append($('<td>').text(board.title))
-					.append($('<td>').text(board.writer))
-					.append($('<td>').text(board.hit))
-					.append($('<td>').text(board.postdate))
-					.append($('<td>').text(board.image))
-					.appendTo('#list');		
-				});
-			} else if(status == 500) {
-				$('<tr>')
-				.append($('<td colspan="6">').text('검색결과 없음'))
-				.appendTo('#list');
-			}
 		}
 		
 		// 게시글 작성하기
@@ -76,7 +127,254 @@
 			});
 		}
 		
+			
+		// 검색기능
+		function fn_searchQuery(){
+			$('#search_btn').click(function(){
+				if($('#column').val() == '') {
+					alert('카테고리를 선택해주세요.');
+					return false;
+				}
+				if($('#query').val() == '') {
+					alert('검색어를 입력해주세요.');
+					$('#query').focus();
+					return false;
+				}
+				var obj2 = {
+					page : page,
+					column: $('#column').val(),
+					query: $('#query').val()
+				};
+				$.ajax({
+					url: 'searchQuery.do',
+					type: 'post',
+					contentType: 'application/json',
+					data: JSON.stringify(obj2),
+					dataType: 'json',
+					success: function(resultMap){
+						console.log(resultMap.exists);
+						// 목록 생성
+						$('#board_list').empty();
+						if(resultMap.exists) {
+							$.each(resultMap.list, function(i, board){
+								$('<tr>')
+								.append($('<td>').text(board.bno))
+								.append($('<td>').html('<a href="selectBoardByNo.do?bno=' + board.bno + '">' + board.title + '</a>'))
+								.append($('<td>').text(board.writer))
+								.append($('<td>').text(board.hit))
+								.append($('<td>').text(board.postdate))
+								.append($('<td>').text(board.image))
+								.appendTo('#board_list');
+							});
+						} else {
+							$('<tr>')
+							.append('<td colspan="6">검색된 게시글이 없습니다.</td>')
+							.appendTo('#board_list');
+						}
+						var paging = resultMap.paging;
+						$('#paging').empty();
+						if(paging.beginPage <= paging.pagePerBlock) {
+							$('<div>').addClass('disable').text('◀').appendTo('#paging');
+						} else {
+							$('<div>')
+							.addClass('previous_block').addClass('link')
+							.attr('data-page', paging.beginPage - 1)
+							.text('◀')
+							.appendTo('#paging');
+						}
+						for(let p = paging.beginPage; p <= paging.endPage; p++) {
+							if(p == paging.page) {
+								$('<div>')
+								.addClass('now_page')
+								.text(p)
+								.appendTo('#paging')
+							} else {
+								$('<div>')
+								.addClass('go_page').addClass('link')
+								.attr('data-page', p)
+								.text(p)
+								.appendTo('#paging');
+							}
+						}
+						if(paging.endPage == paging.totalPage) {
+							$('<div>')
+							.addClass('disable')
+							.text('▶')
+							.appendTo('#paging');
+						} else {
+							$('<div>')
+							.addClass('next_block').addClass('link')
+							.attr('data-page', paging.endPage + 1)
+							.text('▶')
+							.appendTo('#paging');
+						}
+					}
+				});
+			});	
+		}
+		
+		// 전체 댓글 불러오기
+		var page = 1;
+		function fn_selectAllReply() {
+			var obj = {
+					page : page
+			}
+			$.ajax({
+				url: 'selectAllReply.do',
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify(obj),
+				dataType: 'json',
+				success: function(resultMap){
+					$('#reply_list').empty();
+					if(resultMap.exists) {
+						$.each(resultMap.list, function(i, reply){
+							$('<tr>')
+							.append($('<td>').text(reply.replywriter))
+							.append($('<td>').text(reply.replycontent))
+							.append($('<td>').html(getDateFormat(reply.replypostdate)))
+							.append($('<td>').text(reply.replyip))
+							.appendTo('#reply_list');
+						});
+					} else {
+						$('<tr>')
+						.append('<td colspan="4">등록된 댓글이 없습니다.</td>')
+						.appendTo('#reply_list');
+					}
+					var paging = resultMap.paging;
+					$('#paging2').empty();
+					if(paging.beginPage <= paging.pagePerBlock) {
+						$('<div>').addClass('disable').text('◀').appendTo('#paging2');
+					} else {
+						$('<div>')
+						.addClass('previous_block').addClass('link')
+						.attr('data-page', paging.beginPage - 1)
+						.text('◀')
+						.appendTo('#paging2');
+					}
+					for(let p = paging.beginPage; p <= paging.endPage; p++) {
+						if(p == paging.page) {
+							$('<div>')
+							.addClass('now_page')
+							.text(p)
+							.appendTo('#paging2')
+						} else {
+							$('<div>')
+							.addClass('go_page').addClass('link')
+							.attr('data-page', p)
+							.text(p)
+							.appendTo('#paging2');
+						}
+					}
+					if(paging.endPage == paging.totalPage) {
+						$('<div>')
+						.addClass('disable')
+						.text('▶')
+						.appendTo('#paging2');
+					} else {
+						$('<div>')
+						.addClass('next_block').addClass('link')
+						.attr('data-page', paging.endPage + 1)
+						.text('▶')
+						.appendTo('#paging2');
+					}
+				}
+			});
+		}
+		
+		// SYSDATE -> 패턴으로 변환
+		function getDateFormat(date) {
+			var d = new Date(date);
+			var year = d.getFullYear();
+			var month = '' + (d.getMonth() + 1);
+			var day = '' + d.getDate();
+			if (month.length < 2) {
+			    month = '0' + month;
+			}
+			if (day.length < 2) {
+			     day = '0' + day;
+			}
+			return [year, month, day].join('-');
+		}
+		
+		// 댓글 작성
+		function fn_insert_reply() {
+			$('#insert_reply_btn').click(function(){
+				if($('#replywriter').val() == '') {
+					alert('로그인이후에 이용가능합니다.');
+					location.href = 'index.do';
+					return false;
+				}
+				if($('#replycontent').val() == '') {
+					alert('내용을 입력해주세요.');
+					$('#replycontent').focus();
+					return false;
+				}
+				
+				$.ajax({
+					url: 'insertReply.do',
+					type: 'get',
+					data: $('#f2').serialize(),
+					dataType: 'json',
+					success: function(resultMap) {
+						$('#replycontent').val('');
+						alert("댓글이 추가되었습니다.");
+						fn_selectAllReply();
+					}
+				});
+				
+			});
+		}
+	
 	</script>	
+	<style>
+		#paging {
+			width: 50%;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			text-align: center;
+		}
+		#paging div {
+			width: 40px;
+			height: 20px;
+		}
+		#paging2 {
+			width: 50%;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			text-align: center;
+		}
+		#paging2 div {
+			width: 40px;
+			height: 20px;
+		}
+		.disable {
+			color: silver;
+		}
+		.link {
+			cursor: pointer;
+		}
+		.now_page {
+			color: limegreen;
+		}
+		
+		#f2 {
+			display: flex;
+		}
+		
+		#replywriter {
+			width: 50px;
+		}
+		#replycontent {
+			width: 300px;
+		}
+		#insert_reply_btn{
+			width: 50px;
+		}
+		
+	</style>
 </head>
 <body>
 	
@@ -109,43 +407,56 @@
 					<td>첨부자료</td>
 				</tr>
 			</thead>
-			<tbody id="list">
-				<c:if test="${empty list}">
-					<tr>
-						<td colspan="6">작성된 게시글이 없습니다.</td>
-					</tr>
-				</c:if>
-				<c:if test="${not empty list}">
-					<c:forEach var="board" items="${list}">
-						<tr>
-							<td>${board.bno}</td>
-							<td><a href="selectBoardByNo.do?bno=${board.bno}">${board.title}</a></td>
-							<td>${board.writer}</td>
-							<td>${board.hit}</td>
-							<td>${board.postdate}</td>
-							<td>
-								<c:if test="${not empty board.image}">
-									${board.image}"<i class="fas fa-paperclip"></i>						
-								</c:if>
-							</td>
-						</tr>
-					</c:forEach>
-				</c:if>
-				
-				
-			</tbody>
+			<tbody id="board_list"></tbody>
 			<tfoot>
 				<tr>
 					<td colspan="6">
-						${paging}
+						<div id="paging"></div>
 					</td>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
+	<c:if test="${loginUser == null}">
+		<a href="index.do">로그인 하러가기</a>
+	</c:if>
 	<c:if test="${loginUser != null}">			
 		<input type="button" value="게시글 작성하기" id="insert_board_btn">
 	</c:if>
+	
+	<br><hr><br>
+	
+	<h2>갤러리 게시판 댓글</h2>
+	
+	<div class="reply_write_box">
+		<form id="f2" method="get">		
+			<input type="hidden" id="bno" name="bno" value="${boardDTO.bno}">			
+			<input type="text" id="replywriter" name="replywriter" value="${loginUser.id}" placeholder="작성자" readonly><br>		
+			<textarea id="replycontent" name="replycontent" rows="4" cols="22"  placeholder="댓글 작성"></textarea><br>		
+			<input type="button" value="작성" id="insert_reply_btn">
+		</form>
+	</div>
+	<div class="reply_list_box">
+		<table border="1">
+			<thead>
+				<tr>
+					<td>작성자</td>
+					<td>내용</td>
+					<td>작성일</td>
+					<td>작성자IP</td>
+				</tr>
+			</thead>
+			<tbody id="reply_list">
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						<div id="paging2"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 	
 </body>
 </html>

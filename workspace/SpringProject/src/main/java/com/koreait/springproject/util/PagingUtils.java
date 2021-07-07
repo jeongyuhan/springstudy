@@ -2,79 +2,36 @@ package com.koreait.springproject.util;
 
 import com.koreait.springproject.dto.PageDTO;
 
-public class PagingUtils {
-	
-	// field
-	public static int recordPerPage = 5;
-	public static int pagePerBlock = 5;
-	public static int beginRecord;
-	public static int endRecord;
-	public static int totalPage;
-	public static int beginPage;
-	public static int endPage;
-	
+public class PagingUtils {	
 	
 	// ajax 사용
 	public static PageDTO getPage(int totalRecord, int page) {
 		
-		beginRecord = (page - 1) * recordPerPage + 1;
-		endRecord = beginRecord + recordPerPage - 1;
+		int recordPerPage = 5;
+		int beginRecord = (page - 1) * recordPerPage + 1;
+		int endRecord = beginRecord + recordPerPage - 1;
 		endRecord = endRecord < totalRecord ? endRecord : totalRecord;
 		
-		totalPage = (totalRecord / recordPerPage) + (totalRecord % recordPerPage > 0 ? 1 : 0);
-		beginPage = ((page - 1) / pagePerBlock) * pagePerBlock + 1;
-		endPage = beginPage + pagePerBlock - 1;
+		int totalPage = (totalRecord / recordPerPage) + (totalRecord % recordPerPage > 0 ? 1 : 0);
+		int pagePerBlock = 5;
+		int beginPage = ((page - 1) / pagePerBlock) * pagePerBlock + 1;
+		int endPage = beginPage + pagePerBlock - 1;
 		endPage = endPage < totalPage ? endPage : totalPage;
 		
-		PageDTO pageDTO = new PageDTO();
-		pageDTO.setPage(page);
-		pageDTO.setTotalRecord(totalRecord);
-		pageDTO.setRecordPerPage(recordPerPage);
-		pageDTO.setBeginRecord(beginRecord);
-		pageDTO.setEndRecord(endRecord);
-		pageDTO.setTotalPage(totalPage);
-		pageDTO.setPagePerBlock(pagePerBlock);
-		pageDTO.setBeginPage(beginPage);
-		pageDTO.setEndPage(endPage);
+		PageDTO paging = new PageDTO();
+		paging.setTotalRecord(totalRecord);
+		paging.setRecordPerPage(recordPerPage);
+		paging.setBeginRecord(beginRecord);
+		paging.setEndRecord(endRecord);
+		paging.setTotalPage(totalPage);
+		paging.setPagePerBlock(pagePerBlock);
+		paging.setBeginPage(beginPage);
+		paging.setEndPage(endPage);
 		
-		return pageDTO;
+		return paging;
 	}
 	
-	// << 1 2 3 4 5 >> 반환 (페이지 번호를 출력해주는 부분을 PagingUtils에서 만든 결과를 반환시켜준다.(ajax를 사용하지 않기 위해))
-	public static String getPaging(String path, int page) {
-		
-		StringBuilder sb = new StringBuilder();
-		
-		if(beginPage <= pagePerBlock) {
-			sb.append("◀&nbsp;");
-		} else {
-			sb.append("<a href=\"" + path + "?page=" + (beginPage - 1) + "\">◀</a>&nbsp;");
-		}
- 		
-		for(int p = beginPage; p <= endPage; p++) {
-			if(p == page) {
-				sb.append(p + "&nbsp;");
-			} else {
-				if(path.indexOf("?") > 0) {					
-					sb.append("<a href=\"" + path + "&page=" + p + "\">" + p + "</a>&nbsp;");					
-				} else {
-					sb.append("<a href=\"" + path + "?page=" + p + "\">" + p + "</a>&nbsp;");										
-				}
-			}
-		}
-		
-		if(endPage == totalPage) {
-			sb.append("▶");
-		} else {
-			if(path.indexOf("?") > 0) {
-				sb.append("<a href=\"" + path + "&page=" + (endPage + 1) + "\">▶</a>");				
-			} else {
-				sb.append("<a href=\"" + path + "?page=" + (endPage + 1) + "\">▶</a>");								
-			}
-		}
-		
-		return sb.toString();
-	}
+
 	
 	
 }

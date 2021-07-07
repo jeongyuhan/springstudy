@@ -20,20 +20,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 전체 게시글 반환 -->
 	<select id="selectBoardList" resultType="com.koreait.springproject.dto.BoardDTO">
-		SELECT A.*
-		  FROM (SELECT ROWNUM AS RN
-		             , BNO
-		             , WRITER
-		             , TITLE
-		             , CONTENT
-		             , POSTDATE
-		             , LASTMODIFIED
-		             , IP
-		             , HIT
-		             , IMAGE  
-			      FROM BOARD) A
-		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}
-		 ORDER BY HIT DESC
+		SELECT B.*
+		  FROM (SELECT ROWNUM AS RN, A.*
+		          FROM (SELECT BNO
+		             		 , WRITER
+		             		 , TITLE
+		             		 , CONTENT
+		             		 , POSTDATE
+		             		 , LASTMODIFIED
+		             		 , IP
+		             		 , HIT
+		             		 , IMAGE  
+			      		  FROM BOARD
+			     		 ORDER BY HIT DESC) A) B
+		 WHERE B.RN BETWEEN #{beginRecord} AND #{endRecord}
 	</select>
 		<!-- 	
 		SELECT BNO, WRITER, TITLE, CONTENT, POSTDATE, LASTMODIFIED, IP, HIT, IMAGE
@@ -80,22 +80,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<!-- 검색 게시글 -->
-	<select id="search" resultType="com.koreait.springproject.dto.BoardDTO">
-		SELECT A.*
-		  FROM (SELECT ROWNUM AS RN
-		             , BNO
-		             , WRITER
-		             , TITLE
-		             , CONTENT
-		             , POSTDATE
-		             , LASTMODIFIED
-		             , IP
-		             , HIT
-		             , IMAGE  
-			      FROM BOARD) A
-		 WHERE A.RN BETWEEN #{beginRecord} AND #{endRecord}
-		   AND ${column} LIKE '%' || #{query} || '%'
-		 ORDER BY HIT DESC
+	<select id="searchQuery" resultType="com.koreait.springproject.dto.BoardDTO">
+		SELECT B.*
+		  FROM (SELECT ROWNUM AS RN, A.*
+		          FROM (SELECT BNO
+		             		 , WRITER
+		             		 , TITLE
+		             		 , CONTENT
+		             		 , POSTDATE
+		             		 , LASTMODIFIED
+		             		 , IP
+		             		 , HIT
+		             		 , IMAGE  
+			      		  FROM BOARD
+					     WHERE ${column} LIKE '%' || #{query} || '%'
+			     		 ORDER BY HIT DESC) A) B
+		 WHERE B.RN BETWEEN #{beginRecord} AND #{endRecord}
 	</select>
 	
 	<!-- 검색 레코드수 -->

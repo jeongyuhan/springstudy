@@ -32,7 +32,7 @@ public class PagingUtils {
 		return paging;
 	}
 	
-	// mvc 사용
+	
 	
 	
 }
